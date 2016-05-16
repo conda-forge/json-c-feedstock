@@ -5,7 +5,7 @@ Home: https://github.com/json-c/json-c/wiki
 
 Package license: MIT
 
-Feedstock license: BSD
+Feedstock license: BSD 3-Clause
 
 Summary: A JSON implementation in C
 
@@ -69,6 +69,7 @@ Terminology
 
 Current build status
 ====================
+
 Linux: [![Circle CI](https://circleci.com/gh/conda-forge/json-c-feedstock.svg?style=svg)](https://circleci.com/gh/conda-forge/json-c-feedstock)
 OSX: [![TravisCI](https://travis-ci.org/conda-forge/json-c-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/json-c-feedstock) 
 Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/json-c-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/json-c-feedstock/branch/master)
