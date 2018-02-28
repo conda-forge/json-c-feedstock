@@ -11,5 +11,5 @@ export  CFLAGS="-Wno-error $CFLAGS"
   --disable-static
 
 make
-make check || (cat tests/test.log && exit 1)
+make check || (cat tests/test-suite.log && exit 1)
 make install
