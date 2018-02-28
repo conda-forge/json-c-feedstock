@@ -5,7 +5,9 @@ bash ./autogen.sh
 
 export  CFLAGS="-Wno-error $CFLAGS"
 
-./configure --prefix=$PREFIX
+./configure --prefix=$PREFIX \
+  --enable-shared \
+  --disable-static
 
 make
 make check || (cat tests/test.log && exit 1)
