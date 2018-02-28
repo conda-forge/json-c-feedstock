@@ -4,7 +4,8 @@ set -e
 # Only on linux/macos
 #bash ./autogen.sh
 
-export  CFLAGS="-Wno-error $CFLAGS"
+export CFLAGS="-Wno-error $CFLAGS"
+export VERBOSE=1
 
 ./configure --prefix=$PREFIX \
   --enable-shared \
