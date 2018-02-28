@@ -12,5 +12,7 @@ export VERBOSE=1
   --disable-static
 
 make
+# only on windows
+find tests -type f -name '*.expected' -exec unix2dos {} \;
 make check || (cat tests/test-suite.log && exit 1)
 make install
