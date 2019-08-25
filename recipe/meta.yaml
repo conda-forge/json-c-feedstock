@@ -1,7 +1,8 @@
+{% set name = "json-c" %}
 {% set version = "0.13.1" %}
 
 package:
-  name: json-c
+  name: {{ name|lower }}
   version: {{ version.split('-')[0] }}
 
 source:
