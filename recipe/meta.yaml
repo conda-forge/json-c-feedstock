@@ -11,7 +11,9 @@ source:
     - 00-add-library-inc.patch
 
 build:
-  number: 1001
+  number: 1003
+  run_exports:
+    - {{ pin_subpackage(name, max_pin='x.x') }}
 
 requirements:
   build:
