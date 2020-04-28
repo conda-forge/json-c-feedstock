@@ -10,6 +10,7 @@ source:
   sha256: b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873
   patches:
     - 00-add-library-inc.patch
+    - 01-patch-install-json_object_iterator-h-header-file.patch
 
 build:
   number: 1002

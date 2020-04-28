@@ -1,0 +1,31 @@
+From 37a2edf468967170ee4f3f5641634cd709d8831f Mon Sep 17 00:00:00 2001
+From: Keith Holman <keith.holman@windriver.com>
+Date: Thu, 7 Jun 2018 13:19:27 -0400
+Subject: [PATCH] install json_object_iterator.h header file
+
+When building the project using cmake then installing it.  The
+definitions in `json_object_iterator.h` are required but not installed
+by the cmake install rule.  This patch adds the `json_object_iterator.h`
+file to the list of files to install.
+
+Signed-off-by: Keith Holman <keith.holman@windriver.com>
+Signed-off-by: Hiroshi Miura <miurahr@linux.com>
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0e8d40f..967eff3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -71,6 +71,7 @@ set(JSON_C_PUBLIC_HEADERS
+     ./json_c_version.h
+     ./json_inttypes.h
+     ./json_object.h
++    ./json_object_iterator.h
+     ./json_pointer.h
+     ./json_tokener.h
+     ./json_util.h
+-- 
+2.22.0
+
