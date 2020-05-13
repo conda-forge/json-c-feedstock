@@ -10,6 +10,7 @@ source:
   sha256: b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873
   patches:
     - 00-add-library-inc.patch
+    - string-indexing.patch  # https://github.com/json-c/json-c/pull/533
 
 build:
   number: 1002
