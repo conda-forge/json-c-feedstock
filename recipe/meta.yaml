@@ -11,6 +11,7 @@ source:
   patches:
     - 00-add-library-inc.patch
     - 01-patch-install-json_object_iterator-h-header-file.patch
+    - string-indexing.patch  # https://github.com/json-c/json-c/pull/533
 
 build:
   number: 1002
