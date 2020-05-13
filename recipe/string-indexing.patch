@@ -1,0 +1,54 @@
+From bb5971ba2aca98c08911ca031f80cad72e3bcc1d Mon Sep 17 00:00:00 2001
+From: Po-Chuan Hsieh <sunpoet@sunpoet.net>
+Date: Sat, 11 Jan 2020 07:20:44 +0000
+Subject: [PATCH] Fix make check
+
+cc -DHAVE_CONFIG_H -I. -I..  -I.. -I../tests    -O2 -pipe  -fstack-protector-strong -fno-strict-aliasing  -Wall -Werror -Wcast-qual -Wno-error=deprecated-declarations -Wextra -Wno-unused-parameter -D_GNU_SOURCE -D_REENTRANT -MT test_parse.o -MD -MP -MF .deps/test_parse.Tpo -c -o test_parse.o test_parse.c
+test_parse.c:256:14: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
+        { "null123" + 4,       4, 3, json_tokener_success, 1 },
+          ~~~~~~~~~~^~~
+test_parse.c:256:14: note: use array indexing to silence this warning
+        { "null123" + 4,       4, 3, json_tokener_success, 1 },
+                    ^
+          &         [  ]
+test_parse.c:258:12: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
+        { "nullx" + 4,         2, 0, json_tokener_error_parse_unexpected, 1 },
+          ~~~~~~~~^~~
+test_parse.c:258:12: note: use array indexing to silence this warning
+        { "nullx" + 4,         2, 0, json_tokener_error_parse_unexpected, 1 },
+                  ^
+          &       [  ]
+test_parse.c:260:25: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
+        { "{\"a\":1}{\"b\":2}" + 7,
+          ~~~~~~~~~~~~~~~~~~~~~^~~
+test_parse.c:260:25: note: use array indexing to silence this warning
+        { "{\"a\":1}{\"b\":2}" + 7,
+                               ^
+          &                    [  ]
+3 errors generated.
+*** Error code 1
+
+Stop.
+---
+ tests/test_parse.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tests/test_parse.c b/tests/test_parse.c
+index 807b457d2c..c213f9b230 100644
+--- a/tests/test_parse.c
++++ b/tests/test_parse.c
+@@ -303,11 +303,11 @@ struct incremental_step {
+ 	   the next few tests check that parsing multiple sequential
+        json objects in the input works as expected */
+ 	{ "null123",           9, 4, json_tokener_success, 0 },
+-	{ "null123" + 4,       4, 3, json_tokener_success, 1 },
++	{ &"null123"[4],       4, 3, json_tokener_success, 1 },
+ 	{ "nullx",             5, 4, json_tokener_success, 0 },
+-	{ "nullx" + 4,         2, 0, json_tokener_error_parse_unexpected, 1 },
++	{ &"nullx"[4],         2, 0, json_tokener_error_parse_unexpected, 1 },
+ 	{ "{\"a\":1}{\"b\":2}",15, 7, json_tokener_success, 0 },
+-	{ "{\"a\":1}{\"b\":2}" + 7,
++	{ &"{\"a\":1}{\"b\":2}"[7],
+ 	                       8, 7, json_tokener_success, 1 },
+ 
+ 	/* Some bad formatting. Check we get the correct error status */
