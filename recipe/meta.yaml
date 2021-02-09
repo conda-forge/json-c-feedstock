@@ -20,6 +20,7 @@ build:
 
 requirements:
   build:
+    - gnuconfig  # [unix]
     - {{ compiler('c') }}
     - autoconf  # [not win]
     - automake  # [not win]
