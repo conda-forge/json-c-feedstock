@@ -1,4 +1,6 @@
 #!/bin/bash
+# Get an updated config.sub and config.guess
+cp $BUILD_PREFIX/share/gnuconfig/config.* .
 
 # https://github.com/json-c/json-c/issues/406
 export CPPFLAGS="${CPPFLAGS/-DNDEBUG/}"
@@ -8,7 +10,7 @@ cd build
 cmake $CMAKE_ARGS ..
 
 make ${VERBOSE_AT}
-if [ "${build_platform}" = "${target_platform}" ]; then
+if [[ "${CONDA_BUILD_CROSS_COMPILATION}" != "1" ]]; then
     make test ${VERBOSE_AT}
 fi
 make install
