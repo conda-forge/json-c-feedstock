@@ -1,12 +1,13 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5e828ab..3393ea9 100644
+index 99ab904..4b189e5 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -56,6 +56,7 @@ if (cmake_create_config)
- endif ()
+@@ -350,6 +350,8 @@ if ($ENV{VALGRIND})
+     add_definitions(-DVALGRIND=1)
+ endif()
  
- include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 +include_directories(BEFORE SYSTEM ${LIBRARY_INC})
- 
++
  set(JSON_C_PUBLIC_HEADERS
-     ./json.h
+     # Note: config.h is _not_ included here
+     ${PROJECT_BINARY_DIR}/json_config.h
