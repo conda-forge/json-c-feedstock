@@ -8,8 +8,6 @@ package:
 source:
   url: https://s3.amazonaws.com/json-c_releases/releases/json-c-{{ version }}.tar.gz
   sha256: b8d80a1ddb718b3ba7492916237bbf86609e9709fb007e7f7d4322f02341a4c6
-  patches:
-    - 00-add-library-inc.patch
 
 build:
   number: 0
@@ -19,10 +17,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
-    - autoconf  # [not win]
-    - automake  # [not win]
-    - libtool  # [not win]
-    - cmake  # [win]
+    - cmake
     - make
   host:
     - msinttypes  # [win and vc<=9]
