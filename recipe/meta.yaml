@@ -1,5 +1,5 @@
 {% set name = "json-c" %}
-{% set version = "0.13.1" %}
+{% set version = "0.15" %}
 
 package:
   name: {{ name|lower }}
@@ -7,24 +7,18 @@ package:
 
 source:
   url: https://s3.amazonaws.com/json-c_releases/releases/json-c-{{ version }}.tar.gz
-  sha256: b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873
-  patches:
-    - 00-add-library-inc.patch
-    - 01-patch-install-json_object_iterator-h-header-file.patch
-    - string-indexing.patch  # https://github.com/json-c/json-c/pull/533
+  sha256: b8d80a1ddb718b3ba7492916237bbf86609e9709fb007e7f7d4322f02341a4c6
 
 build:
-  number: 1002
+  number: 0
   run_exports:
     - {{ pin_subpackage(name, max_pin='x.x') }}
 
 requirements:
   build:
+    - gnuconfig  # [unix]
     - {{ compiler('c') }}
-    - autoconf  # [not win]
-    - automake  # [not win]
-    - libtool  # [not win]
-    - cmake  # [win]
+    - cmake
     - make
   host:
     - msinttypes  # [win and vc<=9]
