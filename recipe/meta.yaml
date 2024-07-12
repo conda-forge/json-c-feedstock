@@ -24,8 +24,6 @@ requirements:
     - {{ stdlib('c') }}
     - cmake
     - make
-  host:
-    - msinttypes  # [win and vc<=9]
 
 test:
   requires:
