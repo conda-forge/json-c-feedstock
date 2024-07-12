@@ -2,11 +2,11 @@ VERBOSE_AT:
 - V=1
 c_compiler:
 - vs2019
+c_stdlib:
+- vs
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
 target_platform:
 - win-64
-vc:
-- '14'

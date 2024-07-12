@@ -8,9 +8,12 @@ package:
 source:
   url: https://s3.amazonaws.com/json-c_releases/releases/json-c-{{ version }}.tar.gz
   sha256: 7550914d58fb63b2c3546f3ccfbe11f1c094147bd31a69dcd23714d7956159e6
+  patches:
+    # https://github.com/json-c/json-c/pull/864
+    - windows-pkgconfig.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage(name, max_pin='x.x') }}
 
@@ -18,17 +21,21 @@ requirements:
   build:
     - gnuconfig  # [unix]
     - {{ compiler('c') }}
+    - {{ stdlib('c') }}
     - cmake
     - make
-  host:
-    - msinttypes  # [win and vc<=9]
 
 test:
+  requires:
+    - pkg-config
   commands:
     - test -f ${PREFIX}/lib/libjson-c.a  # [not win]
     - test -f ${PREFIX}/lib/libjson-c${SHLIB_EXT}  # [not win]
     - if not exist %LIBRARY_BIN%/json-c.dll exit 1  # [win]
     - if not exist %LIBRARY_LIB%/json-c.lib exit 1  # [win]
+    - test -f $PREFIX/lib/pkgconfig/json-c.pc  # [not win]
+    - if not exist %LIBRARY_LIB%\pkgconfig\json-c.pc exit 1  # [win]
+    - pkg-config --exists json-c
 
 about:
   home: https://github.com/json-c/json-c/wiki
