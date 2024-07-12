@@ -34,7 +34,7 @@ test:
     - if not exist %LIBRARY_BIN%/json-c.dll exit 1  # [win]
     - if not exist %LIBRARY_LIB%/json-c.lib exit 1  # [win]
     - test -f $PREFIX/lib/pkgconfig/json-c.pc  # [not win]
-    - if not exist %LIBRARY_LIB%/pkgconfig/json-c.pc  # [win]
+    - if not exist %LIBRARY_LIB%\pkgconfig\json-c.pc  # [win]
     - pkg-config --exists json-c
 
 about:
