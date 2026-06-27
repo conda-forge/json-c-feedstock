@@ -11,59 +11,50 @@ jobs:
       win_64_:
         CONFIG: win_64_
         UPLOAD_PACKAGES: 'True'
-        SHORT_CONFIG: win_64_
+        build_workspace_dir: D:\\bld\\
+        free_disk_space: skip
+        pagefile_size: 0
+        resize_partitions: false
+        store_build_artifacts: true
+        tools_install_dir: D:\Miniforge
+        CONFIG_SHORT: win_64_
   timeoutInMinutes: 360
   variables:
-    CONDA_BLD_PATH: D:\\bld\\
     UPLOAD_TEMP: D:\\tmp
 
   steps:
-
-    - task: PythonScript@0
-      displayName: 'Download Miniforge'
-      inputs:
-        scriptSource: inline
-        script: |
-          import urllib.request
-          url = 'https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe'
-          path = r"$(Build.ArtifactStagingDirectory)/Miniforge.exe"
-          urllib.request.urlretrieve(url, path)
-
-    - script: |
-        start /wait "" %BUILD_ARTIFACTSTAGINGDIRECTORY%\Miniforge.exe /InstallationType=JustMe /RegisterPython=0 /S /D=C:\Miniforge
-      displayName: Install Miniforge
-
-    - powershell: Write-Host "##vso[task.prependpath]C:\Miniforge\Scripts"
-      displayName: Add conda to PATH
-
     - script: |
         call ".scripts\run_win_build.bat"
       displayName: Run Windows build
       env:
-        PYTHONUNBUFFERED: 1
-        CONFIG: $(CONFIG)
         CI: azure
+        CONFIG: $(CONFIG)
+        CONDA_BLD_PATH: $(build_workspace_dir)
+        MINIFORGE_HOME: $(tools_install_dir)
+        PYTHONUNBUFFERED: 1
+        UPLOAD_PACKAGES: $(UPLOAD_PACKAGES)
+        UPLOAD_TEMP: $(UPLOAD_TEMP)
         flow_run_id: azure_$(Build.BuildNumber).$(System.JobAttempt)
         remote_url: $(Build.Repository.Uri)
         sha: $(Build.SourceVersion)
-        UPLOAD_PACKAGES: $(UPLOAD_PACKAGES)
-        UPLOAD_TEMP: $(UPLOAD_TEMP)
         BINSTAR_TOKEN: $(BINSTAR_TOKEN)
         FEEDSTOCK_TOKEN: $(FEEDSTOCK_TOKEN)
         STAGING_BINSTAR_TOKEN: $(STAGING_BINSTAR_TOKEN)
+
     - script: |
+        set ARTIFACT_STAGING_DIR=$(Build.ArtifactStagingDirectory
+        set BLD_ARTIFACT_PREFIX=conda_artifacts
         set CI=azure
         set CI_RUN_ID=$(build.BuildNumber).$(system.JobAttempt)
+        set CONDA_BLD_PATH=$(build_workspace_dir)
         set FEEDSTOCK_NAME=$(build.Repository.Name)
-        set ARTIFACT_STAGING_DIR=$(Build.ArtifactStagingDirectory)
-        set CONDA_BLD_DIR=$(CONDA_BLD_PATH)
-        set BLD_ARTIFACT_PREFIX=conda_artifacts
+        set MINIFORGE_HOME=$(tools_install_dir)
         if "%AGENT_JOBSTATUS%" == "Failed" (
             set ENV_ARTIFACT_PREFIX=conda_envs
         )
         call ".scripts\create_conda_build_artifacts.bat"
       displayName: Prepare conda build artifacts
-      condition: succeededOrFailed()
+      condition: and(succeededOrFailed(), eq(variables.store_build_artifacts, true))
 
     - task: PublishPipelineArtifact@1
       displayName: Store conda build artifacts
