@@ -11,5 +11,5 @@ test: native_and_emulated
 github:
   branch_name: main
   tooling_branch_name: main
-azure:
+workflow_settings:
   store_build_artifacts: true
