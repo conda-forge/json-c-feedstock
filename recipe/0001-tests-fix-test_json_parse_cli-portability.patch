@@ -1,0 +1,36 @@
+Subject: [PATCH] tests: fix test_json_parse_cli portability
+
+test_json_parse_cli.test is a /bin/sh script but relies on two things that
+are not portable, and both make the test fail in a minimal build
+environment:
+
+1. `echo -n` is not POSIX. Under a /bin/sh whose echo lacks -n (dash), the
+   literal "-n " is written to file1.dat along with a trailing newline.
+   json_parse then chokes on the leading "-" ("offset 1: number expected")
+   and every byte offset is shifted, so the expected output never matches.
+   `printf '%s'` writes the string with no newline on every shell.
+
+2. `echo 'e2' | xxd -r -p` appends a bare 0xE2 byte (a truncated 3-byte
+   UTF-8 sequence) so that json_parse rejects the input. `xxd` ships with
+   vim and is not present in a minimal build environment, so the command
+   fails, file2.dat ends up without the invalid byte, and json_parse exits
+   0 instead of 1. `printf '\342'` is POSIX and emits the identical byte.
+
+With both fixed the test produces the committed
+tests/test_json_parse_cli.expected output and exits 1 as intended.
+
+diff --git a/tests/test_json_parse_cli.test b/tests/test_json_parse_cli.test
+index 0982afe..0f7796c 100755
+--- a/tests/test_json_parse_cli.test
++++ b/tests/test_json_parse_cli.test
+@@ -10,8 +10,8 @@ fi
+ 
+ set -x -v
+ 
+-echo -n '"tenant=blue;note=CANARY_STACK_WINDOW_2026;status=ok"' > file1.dat
+-(printf '"' ; printf 'A%.0s' $(seq 1 16) ; echo 'e2'  | xxd -r -p) > file2.dat
++printf '%s' '"tenant=blue;note=CANARY_STACK_WINDOW_2026;status=ok"' > file1.dat
++(printf '"' ; printf 'A%.0s' $(seq 1 16) ; printf '\342') > file2.dat
+ 
+ TESTNAME="${0##*/}"
+ TESTNAME="${TESTNAME%.test}"

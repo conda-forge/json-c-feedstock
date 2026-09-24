@@ -10,6 +10,10 @@ package:
 source:
   url: https://s3.amazonaws.com/json-c_releases/releases/json-c-${{ version }}.tar.gz
   sha256: 37ad0249902e301bd9052bf712e511fcc6acff4ecaad4b5900aad9ce564e26de
+  patches:
+    # test_json_parse_cli relies on `echo -n` and on xxd, neither of which is
+    # available in the build environment.
+    - 0001-tests-fix-test_json_parse_cli-portability.patch
 
 build:
   number: 0
