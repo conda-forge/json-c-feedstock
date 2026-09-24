@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: "0.18"
+  version: "0.19"
 
 package:
   name: json-c
@@ -9,10 +9,14 @@ package:
 
 source:
   url: https://s3.amazonaws.com/json-c_releases/releases/json-c-${{ version }}.tar.gz
-  sha256: 876ab046479166b869afc6896d288183bbc0e5843f141200c677b3e8dfb11724
+  sha256: 37ad0249902e301bd9052bf712e511fcc6acff4ecaad4b5900aad9ce564e26de
+  patches:
+    # test_json_parse_cli relies on `echo -n` and on xxd, neither of which is
+    # available in the build environment.
+    - 0001-tests-fix-test_json_parse_cli-portability.patch
 
 build:
-  number: 2
+  number: 0
   script:
     file: build
 
